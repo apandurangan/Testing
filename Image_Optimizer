@@ -1,0 +1,26 @@
+from PIL import Image
+import os
+import sys
+import PIL
+import glob
+import os.path
+import PySimpleGUI as sg
+
+layout = [[sg.Text('Enter the Image files folder path:', size=(27, 1)), sg.InputText(), sg.FolderBrowse()],						
+			[sg.Submit('Submit')]]
+			
+window = sg.Window('Image Size Resizer', layout)	
+event, values = window.read()	
+
+folder = values[0]
+os.makedirs(folder+"//Resized_images",exist_ok=True) # make a Dir if not exist	
+output = folder+"/Resized_images/"
+# print (output); exit;
+images = [folder+"/"+file for file in os.listdir(folder) if file.endswith(('jpeg', 'png', 'jpg'))]
+# print (images); exit;
+for image in images:
+	img = Image.open(image)
+	# img.thumbnail((600,600))
+	name =os.path.basename(str(image))
+	img.save(output+"/Resized_"+name, optimize=True, quality=100)
+sg.popup("Image Size Resizer", "Process Completed!!!")
